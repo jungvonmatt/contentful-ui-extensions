@@ -1,0 +1,7 @@
+{
+  "name": "multi-text",
+  "id": "MultiText",
+  "fieldTypes": ["Symbol", "Symbols"],
+  "srcdoc": "./dist/bundle.html",
+  "sidebar": false
+}

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+function cmd_exists() {
+  if ! type "$1" >/dev/null 2>&1; then
+    return 1
+  fi
+  return 0
+}
+
+if cmd_exists 'contentful'; then
+  OUT=$(contentful space list 2>&1)
+else
+  OUT=$(npx contentful space list 2>&1 >/dev/null)
+fi
+
+CODE=$?
+
+if [ $CODE -ne 0 ]; then
+  npx contentful login
+fi
+
+# if [[ "$OUT" =~ "[active]" ]]; then
+#   exit 0
+# else
+npx contentful space use
+# fi
