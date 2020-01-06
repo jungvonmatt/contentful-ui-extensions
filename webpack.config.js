@@ -4,7 +4,6 @@ const fs = require('fs');
 const webpack = require('webpack');
 const globby = require('globby');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const { deepAwait } = require('@jvm/contentful-common/helper/promise');
 
@@ -28,7 +27,13 @@ const config = {
     path: path.resolve(process.cwd(), 'dist'),
     filename: 'index.js',
   },
-  plugins: [new webpack.EnvironmentPlugin(['NODE_ENV'])],
+  plugins: [
+    new webpack.EnvironmentPlugin(['NODE_ENV']),
+    // We need this for the Contentful UI Extension SDK to work
+    new webpack.ProvidePlugin({
+      React: 'preact/compat',
+    }),
+  ],
   module: {
     rules: [
       {
@@ -66,13 +71,10 @@ if (env != 'production') {
 if (!serve) {
   config.plugins = [
     ...config.plugins,
-    // new HtmlWebpackPlugin({
-    //   template: path.join(process.cwd(), 'src/index.html'),
-    //   inject: false,
-    // }),
-    // new ScriptExtHtmlWebpackPlugin({
-    //   inline: '*',
-    // }),
+    new HtmlWebpackPlugin({
+      template: path.join(process.cwd(), 'src/index.html'),
+      inject: false,
+    }),
   ];
 }
 
@@ -123,13 +125,5 @@ if (serve) {
     config.devServer.key = `${__dirname}/cert/localhost.key`;
   }
 }
-
-// (async () => {
-//   console.log('DEBUG');
-//   console.log(__dirname);
-//   const c = await deepAwait(config);
-//   console.log(c);
-//   process.exit(0);
-// })();
 
 module.exports = () => deepAwait(config);

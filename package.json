@@ -1,8 +1,15 @@
 {
   "name": "@jvm/contentful-ui-extensions",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@std/esm": "^0.26.0",
+    "args": "^5.0.1",
+    "chalk": "^3.0.0",
+    "commander": "^4.0.1",
+    "fs-extra": "^8.1.0",
+    "inquirer": "^7.0.2",
+    "listr": "^0.14.3",
     "preact": "^10.1.0"
   },
   "devDependencies": {
@@ -38,9 +45,12 @@
     "webpack-dev-server": "^3.9.0"
   },
   "scripts": {
-    "space": "./bin/cf",
     "clean": "rimraf packages/*/dist",
-    "bootstrap": "lerna bootstrap && yarn space",
+    "bootstrap": "lerna bootstrap && yarn cf:configure",
+    "cf:login": "contentful login",
+    "cf:logout": "contentful logout",
+    "cf:configure": "./bin/cf",
+    "create-extension": "bin/create-extension",
     "build": "lerna run build",
     "deploy": "lerna run deploy",
     "serve": "webpack-dev-server --hot --inline",

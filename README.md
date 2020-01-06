@@ -23,13 +23,31 @@ yarn bootstrap
 This command will install the dependencies for all packages and link any cross-dependencies.
 It also tries to link to a specific space in your contentful account.
 
-### Change contentful space
+### Configure contentful
 
 ```bash
-yarn space
+yarn cf:login
 ```
 
-This lists all the spaces you are authorized to use. If you're not already logged in it will start the contentful authorization process
+Starts new session with our CLI. As the Contentful CLI tool uses our Content Management API, you need to have an CMA access token to use all the commands.
+
+```bash
+yarn cf:logout
+```
+
+Ends your current session with the Contentful CLI tool.
+
+```bash
+yarn cf:configure
+```
+
+Asks which Contentful space and environment you want to use for development and deployment.
+
+### Create extension
+
+```bash
+yarn scaffold <extension-id>
+```
 
 ### Local dev
 

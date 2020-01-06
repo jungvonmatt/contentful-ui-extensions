@@ -1,0 +1,173 @@
+#!/usr/bin/env node
+const path = require('path');
+const cp = require('child_process');
+const { promisify } = require('util');
+const fs = require('fs-extra');
+const Listr = require('listr');
+const { Command } = require('commander');
+const chalk = require('chalk');
+const inquirer = require('inquirer');
+const pkg = require('../package.json');
+const exec = promisify(cp.exec);
+
+let projectName;
+
+const program = new Command(pkg.name)
+  .version(pkg.version)
+  .arguments('<extension-folder>')
+  .usage(`${chalk.green('<extension-folder>')} [options]`)
+  .action(name => {
+    projectName = name;
+  })
+  .parse(process.argv);
+
+if (typeof projectName === 'undefined') {
+  console.error('Please specify the extension folder:');
+  console.log(`  ${chalk.cyan(program.name())} ${chalk.green('<extension-folder>')}`);
+  console.log();
+  console.log('For example:');
+  console.log(`  ${chalk.cyan(program.name())} ${chalk.green('my-contentful-extension')}`);
+  console.log();
+  console.log(`Run ${chalk.cyan(`${program.name()} --help`)} to see all options.`);
+  process.exit(1);
+}
+
+const run = data => {
+  const { root, appName, type, fields } = data;
+
+  const tasks = new Listr([
+    {
+      title: 'Create files',
+      task: async () => {
+        // Copy template
+        await fs.copy('templates/preact', root);
+
+        // Replace variables in readme
+        const readme = await fs.readFile(`${root}/README.md`, 'utf8');
+        await fs.writeFile(
+          `${root}/README.md`,
+          readme
+            .replace('[NAME]', appName)
+            .replace('[TYPE]', type)
+            .replace('[FIELDS]', '`' + fields.join('`, `') + '`')
+        );
+
+        // Create extension.json
+        await fs.outputJSON(
+          `${root}/extension.json`,
+          {
+            name: appName,
+            id: appName,
+            fieldTypes: fields,
+            srcdoc: './dist/bundle.html',
+            sidebar: ['sidebar', 'page'].includes(type),
+          },
+          { spaces: 2 }
+        );
+
+        const packageJson = await fs.readJSON(`${root}/package.json`);
+        const { scripts } = packageJson || {};
+        const { dev } = scripts || {};
+        await fs.outputJSON(
+          `${root}/package.json`,
+          {
+            name: `@jvm/${appName}`,
+            ...packageJson,
+            scripts: { ...scripts, dev: dev.replace('[NAME]', appName) },
+          },
+          { spaces: 2 }
+        );
+      },
+    },
+    {
+      title: 'Install Dependencies',
+      task: () => exec(`yarn --cwd ${root}`, { shell: true, stdio: 'inherit' }),
+    },
+  ]);
+
+  return tasks.run();
+};
+
+const createExtension = async name => {
+  const root = path.resolve('packages', name);
+  const appName = path.basename(root);
+
+  if (fs.pathExistsSync(root)) {
+    console.error(chalk.red(`${root} folder already exists.`));
+    process.exit(0);
+  }
+  fs.ensureDirSync(root);
+
+  console.log(`Creating a new Contentful extension in ${chalk.green(root)}.`);
+  console.log();
+
+  const answers = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'type',
+      message: 'Select type of extension:',
+      choices: [
+        { name: 'Field extension', value: 'fields' },
+        { name: 'Sidebar extension', value: 'sidebar' },
+        { name: 'Entry editor extension', value: 'entry' },
+        { name: 'Page extension', value: 'page' },
+      ],
+    },
+    {
+      type: 'checkbox',
+      name: 'fields',
+      message: 'Select field types for this extension:',
+      choices: [
+        { name: 'Symbol' },
+        { name: 'Symbols' },
+        { name: 'Text' },
+        { name: 'Integer' },
+        { name: 'Number' },
+        { name: 'Date' },
+        { name: 'Boolean' },
+        { name: 'Object' },
+        { name: 'Entry' },
+        { name: 'Entries' },
+        { name: 'Asset' },
+        { name: 'Assets' },
+      ],
+      when: function(answers) {
+        return answers.type === 'fields';
+      },
+      validate: function(answer) {
+        if (answer.length < 1) {
+          return 'You must choose at least one field type.';
+        }
+        return true;
+      },
+    },
+  ]);
+
+  try {
+    await run({ root, appName, ...answers });
+    console.log(`
+Success! Created ${chalk.cyan(appName)} at ${chalk.cyan(root)}
+You can start using the extension with the following commands
+
+${chalk.green(`yarn dev`)}
+  Starts the development server and deploys the extension in development mode
+
+${chalk.green(`yarn deploy --scope @jvm/${appName}`)}
+  Bundles the extension for production and deploys bundled version to Contentful
+
+${chalk.green(`yarn cf:login`)}
+  Starts new session with our CLI. As the Contentful CLI tool uses our Content Management API, you need to have an CMA access token to use all the commands.
+
+${chalk.green(`yarn cf:logout`)}
+  Ends your current session with the Contentful CLI tool.
+
+${chalk.green(`yarn cf:configure`)}
+  Asks which Contentful space and environment you want to use for development and deployment.
+    `);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
+
+createExtension(projectName);
