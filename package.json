@@ -5,6 +5,10 @@
     "type": "git",
     "url": "git+https://github.com/jungvonmatt/contentful-ui-extensions.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": true,
   "dependencies": {
     "@std/esm": "^0.26.0",
     "args": "^5.0.1",
