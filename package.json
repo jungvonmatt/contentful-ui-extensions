@@ -1,7 +1,10 @@
 {
   "name": "@jungvonmatt/contentful-ui-extensions",
   "version": "1.0.0",
-  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jungvonmatt/contentful-ui-extensions.git"
+  },
   "dependencies": {
     "@std/esm": "^0.26.0",
     "args": "^5.0.1",
