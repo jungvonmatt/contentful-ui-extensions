@@ -1,4 +1,4 @@
-require = require('esm')(module, { cjs: true, mode: 'all' });
+require = require('esm')(module);
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
@@ -42,7 +42,7 @@ const config = {
       },
       {
         test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(node_modules)/,
         use: {
           loader: 'babel-loader',
           options: {
@@ -126,4 +126,4 @@ if (serve) {
   }
 }
 
-module.exports = () => deepAwait(config);
+module.exports = () => deepAwait(config).then(config => console.log(config) || config);
