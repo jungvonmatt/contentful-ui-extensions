@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { ContentfulProvider } from '@jvm/contentful-common/context';
+import { ContentfulProvider } from '@jungvonmatt/contentful-common/context';
 import App from './App';
 
 // When UI Extensions SDK is loaded the callback will be executed.

@@ -46,7 +46,7 @@ Asks which Contentful space and environment you want to use for development and 
 ### Create extension
 
 ```bash
-yarn scaffold <extension-id>
+yarn create-extension <extension-id>
 ```
 
 ### Local dev
@@ -57,7 +57,7 @@ We use [`webpack`](https://webpack.js.org) for development and to bundle the ext
 yarn dev [--scope <extension-name>]
 
 yarn dev
-yarn dev --scope @jvm/multi-text
+yarn dev --scope @jungvonmatt/multi-text
 ```
 
 The development server generates a self-signed certificate to enable a secure `https` connection. This is important to get the extensions to work with Contentful's CSP policy. The first time you load the extension, you will likely get a security error. Simply add an exception for this certificate.
@@ -83,7 +83,7 @@ During development, the extension is served from `https://localhost:8080`. Once 
 yarn deploy [--scope <extension-name>]
 
 yarn deploy
-yarn deploy --scope @jvm/multi-text
+yarn deploy --scope @jungvonmatt/multi-text
 ```
 
 Visit the [Contentful CLI docs](https://github.com/contentful/contentful-cli/tree/master/docs/extension) for more up-to-date instructions to publish, update or manage the UI extensions on Contentful.

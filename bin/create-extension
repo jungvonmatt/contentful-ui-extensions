@@ -49,7 +49,7 @@ const run = data => {
           readme
             .replace('[NAME]', appName)
             .replace('[TYPE]', type)
-            .replace('[FIELDS]', '`' + fields.join('`, `') + '`')
+            .replace('[FIELDS]', Array.isArray(fields) ? '`' + fields.join('`, `') + '`' : '')
         );
 
         // Create extension.json
@@ -71,7 +71,7 @@ const run = data => {
         await fs.outputJSON(
           `${root}/package.json`,
           {
-            name: `@jvm/${appName}`,
+            name: `@jungvonmatt/${appName}`,
             ...packageJson,
             scripts: { ...scripts, dev: dev.replace('[NAME]', appName) },
           },
@@ -152,7 +152,7 @@ You can start using the extension with the following commands
 ${chalk.green(`yarn dev`)}
   Starts the development server and deploys the extension in development mode
 
-${chalk.green(`yarn deploy --scope @jvm/${appName}`)}
+${chalk.green(`yarn deploy --scope @jungvonmatt/${appName}`)}
   Bundles the extension for production and deploys bundled version to Contentful
 
 ${chalk.green(`yarn cf:login`)}

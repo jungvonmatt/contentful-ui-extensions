@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import styled from 'styled-components';
-import { useContentful } from '@jvm/contentful-common/hooks';
+import { useContentful } from '@jungvonmatt/contentful-common/hooks';
 
 const Container = styled.div``;
 

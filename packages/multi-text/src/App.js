@@ -4,7 +4,7 @@ import TextInput from '@contentful/forma-36-react-components/dist/components/Tex
 import '@contentful/forma-36-react-components/dist/styles.css';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
-import { useContentful } from '@jvm/contentful-common/hooks';
+import { useContentful } from '@jungvonmatt/contentful-common/hooks';
 
 import DragHandle from './components/DragHandle';
 

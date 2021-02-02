@@ -1,5 +1,5 @@
 {
-  "name": "@jvm/contentful-common",
+  "name": "@jungvonmatt/contentful-common",
   "version": "1.0.0",
   "description": "Code used for all extensions",
   "main": "index.js",

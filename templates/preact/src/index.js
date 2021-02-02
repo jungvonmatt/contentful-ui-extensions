@@ -1,6 +1,6 @@
 // import React from 'preact/compat';
 import { h, render } from 'preact';
-import { ContentfulProvider } from '@jvm/contentful-common/context';
+import { ContentfulProvider } from '@jungvonmatt/contentful-common/context';
 import App from './components/app';
 
 // When UI Extensions SDK is loaded the callback will be executed.
