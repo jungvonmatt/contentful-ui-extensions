@@ -1,11 +1,11 @@
-require = require('@std/esm')(module, { cjs: true, mode: 'all' });
+require = require('esm')(module, { cjs: true, mode: 'all' });
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const globby = require('globby');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const { deepAwait } = require('@jvm/contentful-common/helper/promise');
+const { deepAwait } = require('@jungvonmatt/contentful-common/helper/promise');
 
 const pkg = require(path.join(process.cwd(), 'package.json'));
 
