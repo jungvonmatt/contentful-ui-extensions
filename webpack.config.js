@@ -126,4 +126,4 @@ if (serve) {
   }
 }
 
-module.exports = () => deepAwait(config).then(config => console.log(config) || config);
+module.exports = () => deepAwait(config);
