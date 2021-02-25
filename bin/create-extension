@@ -14,8 +14,10 @@ let projectName;
 
 const program = new Command(pkg.name)
   .version(pkg.version)
-  .arguments('<extension-folder>')
-  .usage(`${chalk.green('<extension-folder>')} [options]`)
+  .arguments('<extension-id>')
+  .option('--cwd [cwd]', `The current working directory. [Default: process.cwd()]`)
+  .option('--namespace [namespace]', `Package namespace`)
+  .usage(`${chalk.green('<extension-id>')} [options]`)
   .action(name => {
     projectName = name;
   })
@@ -23,7 +25,7 @@ const program = new Command(pkg.name)
 
 if (typeof projectName === 'undefined') {
   console.error('Please specify the extension folder:');
-  console.log(`  ${chalk.cyan(program.name())} ${chalk.green('<extension-folder>')}`);
+  console.log(`  ${chalk.cyan(program.name())} ${chalk.green('<extension-id>')}`);
   console.log();
   console.log('For example:');
   console.log(`  ${chalk.cyan(program.name())} ${chalk.green('my-contentful-extension')}`);
@@ -49,7 +51,7 @@ const run = data => {
           readme
             .replace('[NAME]', appName)
             .replace('[TYPE]', type)
-            .replace('[FIELDS]', Array.isArray(fields) ? '`' + fields.join('`, `') + '`' : '')
+            .replace('[FIELDS]', Array.isArray(fields) ? ` for ${fields.join('`, `')}` : '')
         );
 
         // Create extension.json
@@ -71,7 +73,7 @@ const run = data => {
         await fs.outputJSON(
           `${root}/package.json`,
           {
-            name: `@jungvonmatt/${appName}`,
+            name: `${program.namespace ? `${program.namespace}/` : ''}${appName}`,
             ...packageJson,
             scripts: { ...scripts, dev: dev.replace('[NAME]', appName) },
           },
@@ -88,8 +90,8 @@ const run = data => {
   return tasks.run();
 };
 
-const createExtension = async name => {
-  const root = path.resolve('packages', name);
+const createExtension = async (name, dir) => {
+  const root = path.resolve(dir, name);
   const appName = path.basename(root);
 
   if (fs.pathExistsSync(root)) {
@@ -170,4 +172,4 @@ ${chalk.green(`yarn cf:configure`)}
   }
 };
 
-createExtension(projectName);
+createExtension(projectName, program.cwd || process.cwd());

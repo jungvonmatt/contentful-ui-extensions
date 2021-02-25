@@ -58,7 +58,7 @@
     "cf:login": "contentful login",
     "cf:logout": "contentful logout",
     "cf:configure": "./bin/cf",
-    "create-extension": "bin/create-extension",
+    "create-extension": "bin/create-extension --cwd packages --namespace @jungvonmatt",
     "build": "lerna run build",
     "deploy": "lerna run deploy",
     "serve": "webpack serve --hot --inline",
