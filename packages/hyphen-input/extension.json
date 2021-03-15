@@ -1,0 +1,24 @@
+{
+  "name": "hyphen-input",
+  "id": "hyphen-input",
+  "fieldTypes": ["Object"],
+  "srcdoc": "./dist/bundle.html",
+  "sidebar": false,
+  "parameters": {
+    "instance": [
+      {
+        "id": "helpText",
+        "type": "Symbol",
+        "name": "Help text",
+        "description": "This help text will show up below the field"
+      },
+      {
+        "id": "maxLength",
+        "type": "Number",
+        "name": "Specify a maximum allowed number of characters",
+
+        "required": false
+      }
+    ]
+  }
+}

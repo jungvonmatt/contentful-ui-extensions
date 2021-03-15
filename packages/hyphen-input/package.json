@@ -1,0 +1,30 @@
+{
+  "name": "@jungvonmatt/hyphen-input",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "build": "webpack -p && inline-assets dist/index.html > dist/bundle.html",
+    "deploy": "npm run build && contentful extension update --descriptor extension.json --force --srcdoc ./dist/bundle.html",
+    "dev": "contentful extension update --descriptor extension.json --force --src https://localhost:8080/hyphen-input/src/"
+  },
+  "files": [
+    "dist/*",
+    "extension.json"
+  ],
+  "devDependencies": {
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  },
+  "dependencies": {
+    "@contentful/field-editor-shared": "^0.16.0",
+    "@contentful/forma-36-react-components": "^3.83.1",
+    "add": "^2.0.6",
+    "array-move": "^2.2.1",
+    "react-sortable-hoc": "^1.10.1",
+    "shallow-equal": "^1.2.1",
+    "yarn": "^1.22.10"
+  }
+}
