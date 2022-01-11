@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import TextInput from '@contentful/forma-36-react-components/dist/components/TextInput';
+import { TextInput } from '@contentful/forma-36-react-components/dist/components/TextInput';
 import '@contentful/forma-36-react-components/dist/styles.css';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
